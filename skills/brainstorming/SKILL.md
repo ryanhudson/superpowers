@@ -1,15 +1,20 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
+description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design, then chains into full implementation pipeline."
 ---
 
 # Brainstorming Ideas Into Designs
 
 ## Overview
 
-Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
+Help turn ideas into fully formed designs and specs through natural collaborative dialogue, then execute them to completion.
 
 Start by understanding the current project context, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design in small sections (200-300 words), checking after each section whether it looks right so far.
+
+**This skill chains into the full implementation pipeline:**
+```
+Brainstorming -> Design Doc -> Implementation Plan -> Beads Epic -> Execution
+```
 
 ## The Process
 
@@ -34,15 +39,61 @@ Start by understanding the current project context, then ask questions one at a 
 
 ## After the Design
 
-**Documentation:**
+### Phase 1: Documentation
+
 - Write the validated design to `docs/plans/YYYY-MM-DD-<topic>-design.md`
-- Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document to git
 
-**Implementation (if continuing):**
-- Ask: "Ready to set up for implementation?"
-- Use superpowers:using-git-worktrees to create isolated workspace
-- Use superpowers:writing-plans to create detailed implementation plan
+### Phase 2: Implementation Plan
+
+Ask: **"Design complete. Ready to create the implementation plan?"**
+
+If yes:
+- Use `superpowers:writing-plans` to create detailed implementation plan
+- Output: `docs/plans/YYYY-MM-DD-<topic>-plan.md`
+- Commit the plan to git
+
+### Phase 3: Plan Review (CHECKPOINT)
+
+Present the plan summary to user:
+
+```
+Implementation plan created: docs/plans/YYYY-MM-DD-<topic>-plan.md
+
+Tasks: <N>
+Estimated complexity: <low/medium/high based on task count and dependencies>
+
+Review the plan and confirm:
+- Are the tasks correctly scoped?
+- Are there any missing steps?
+- Ready to create the beads epic?
+```
+
+**Wait for user approval before proceeding.**
+
+If user requests changes:
+- Update the plan
+- Re-present for approval
+
+### Phase 4: Epic Creation
+
+Once plan is approved:
+- Use `/plan-to-epic docs/plans/YYYY-MM-DD-<topic>-plan.md`
+- Creates beads epic with:
+  - All tasks as P0 priority
+  - Acceptance criteria from "Expected:" lines
+  - Dependencies inferred from file overlap
+- Output: Epic ID (e.g., `platform-xyz`)
+
+### Phase 5: Execution
+
+Ask: **"Epic created: <epic-id>. Ready to start execution?"**
+
+If yes:
+- Use `/epic-executor <epic-id>`
+- Parallel subagent execution for independent tasks
+- Two-stage review (spec compliance + code quality)
+- Loops until epic 100% complete
 
 ## Key Principles
 
@@ -52,3 +103,15 @@ Start by understanding the current project context, then ask questions one at a 
 - **Explore alternatives** - Always propose 2-3 approaches before settling
 - **Incremental validation** - Present design in sections, validate each
 - **Be flexible** - Go back and clarify when something doesn't make sense
+- **Plan is the checkpoint** - User reviews plan before epic creation
+- **Execution is autonomous** - Once approved, epic-executor runs to completion
+
+## When NOT to Use Full Pipeline
+
+For very small changes (single file, few lines), skip the pipeline:
+- Quick bug fixes
+- Minor refactors
+- Documentation updates
+- Config changes
+
+Ask: "This seems small enough to do directly. Should I just implement it, or go through the full planning process?"
